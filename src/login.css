@@ -1,0 +1,92 @@
+
+body{
+    background-image: linear-gradient(to right, #60a5fa, #6366f1);
+}
+
+/* Styles for the main container */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100vw - 16px); /* Adjust width to account for scrollbar width */
+    height: 65vh; /* Set container height to 100% of viewport height */
+    overflow: hidden; /* Hide any content that exceeds the container */
+  }
+  
+  /* Styles for the login card */
+  .card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    width: 90%; /* Adjust card width to fit within the container */
+    max-width: 28rem; /* Limit card width to prevent it from becoming too wide */
+    overflow: hidden; /* Hide any content that exceeds the card */
+    display: flex; /* Use flexbox to align card content vertically */
+    flex-direction: column; /* Stack card content vertically */
+  }
+  
+  /* Styles for form elements */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-label {
+    display: block;
+    color: #4b5563;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-input {
+    width: calc(100% - 1.5rem); /* Adjust input width to account for padding */
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-input:focus {
+    border-color: #6366f1;
+  }
+  
+  /* Styles for the login button */
+  .btn-login {
+    width: 100%;
+    background-color: #6366f1;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-login:hover {
+    background-color: #4338ca;
+  }
+  
+  /* Styles for the signup link */
+  .signup-link {
+    text-align: center;
+    margin-top: 1rem;
+    color: #6366f1;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .signup-link:hover {
+    color: #4338ca;
+  }
+  
+  /* Styles for error message */
+  .error-message {
+    margin-top: 1rem;
+    text-align: center;
+    color: #ef4444;
+  }

@@ -38,7 +38,7 @@ on 1 console
     ```bash
     npm start
     ```
-on the other console
+**on the other console**
     ```bash
     npm run electron
     ```

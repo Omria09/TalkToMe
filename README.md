@@ -34,11 +34,14 @@ To get started with TalkToMe, follow these steps:
     ```
 
 3. **Run the application:**
-
+on 1 console 
     ```bash
     npm start
     ```
-
+on the other console
+    ```bash
+    npm run electron
+    ```
 ## Usage
 
 After starting the application, you can:

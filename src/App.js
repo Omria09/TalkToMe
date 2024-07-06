@@ -5,6 +5,7 @@ import Signup from './components/Signup.js';
 import Home from './pages/Home.js';
 import Profile from './pages/Profile.js';
 import './styles.css';
+import './chats.css'
 import PrivateRoute from './components/PrivateRoute.js';
 
 const App = () => {

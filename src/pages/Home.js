@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Ui from '../components/Ui.js';
 import Header from '../components/Header.js';
 import Footer from '../components/Footer.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers, faUser , faPhoneVolume, faVideo } from '@fortawesome/free-solid-svg-icons'
+
 const Home = () => {
     // Dummy data for active chats and friends list
     const [selectedFriend, setSelectedFriend] = useState(null);
@@ -14,7 +17,7 @@ const Home = () => {
     ];
   
     const friendsList = [
-      { id: 1, name: 'Friend A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME' },
+      { id: 1, name: 'A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME A VERY LONG NAME' },
       { id: 2, name: 'Friend B' },
       { id: 3, name: 'Friend C' },
       { id: 4, name: 'Friend D' },
@@ -33,20 +36,6 @@ const Home = () => {
       setViewingFriendsList(true);
     };
 
-    async function fetchJoke() {
-      try {
-          const response = await fetch('https://api.chucknorris.io/jokes/random');
-          if (!response.ok) {
-              throw new Error('Network response was not ok ' + response.statusText);
-          }
-          const data = await response.json();
-          document.getElementById('joke-container').innerText = data.value;
-      } catch (error) {
-          console.error('There has been a problem with your fetch operation:', error);
-      }
-  }
-  fetchJoke();
-
   return (
     <>
       <Ui />
@@ -55,11 +44,11 @@ const Home = () => {
 
           <div className="sidebar">
             {/* "Friends" button to show friends list */}
-            <button className="friends-btn" onClick={handleShowFriendsList}>Friends</button>
-            <h2>Active Chats</h2>
+            <button className="friends-btn" onClick={handleShowFriendsList}><FontAwesomeIcon icon={faUsers} /> Friends</button>
+            <h5>Direct Messages</h5>
             <ul>
               {activeChats.map(chat => (
-                <li key={chat.id} onClick={() => handleFriendClick(chat)}>{chat.name}</li>
+                <li key={chat.id} onClick={() => handleFriendClick(chat)}><FontAwesomeIcon icon={faUser} /> {chat.name}</li>
               ))}
             </ul>
           </div>
@@ -70,7 +59,7 @@ const Home = () => {
                 <h2>All Friends - {friendCount}</h2>
                 <ul>
                   {friendsList.map(friend => (
-                    <li key={friend.id} onClick={() => handleFriendClick(friend)}>{friend.name}</li>
+                    <li key={friend.id} onClick={() => handleFriendClick(friend)}><FontAwesomeIcon icon={faUser} /> {friend.name}</li>
                   ))}
                 </ul>
               </>
@@ -78,12 +67,6 @@ const Home = () => {
               <Chat friend={selectedFriend} />
             )}
           </div>
-
-          <div className="video-placeholder">
-            <h2>Daily quote</h2>
-            {/* <p>No videos to display</p> */}
-              <div class="joke" id="joke-container"></div>
-            </div>
       </div>
       <Footer />
     </>
@@ -92,10 +75,34 @@ const Home = () => {
 
 const Chat = ({ friend }) => {
   // Dummy chat with selected friend
+  var placeholder = "Message @" + friend.name;
+
+  const handleSubmit = () => {
+    // Implement your send message functionality here
+    console.log("Message sent!");
+  };
+
+
   return (
     <>
-      <h2>Chat with {friend.name}</h2>
+    <div className='message-page'>
+      <div className='chat-title'>
+        <h4>Chat with {friend.name}</h4>
+        <div className='chat-tools'>
+          <FontAwesomeIcon icon={faPhoneVolume} size="lg" style={{marginRight: "2vh"}}/>
+          <FontAwesomeIcon icon={faVideo} size="lg"/>
+        </div>
+      </div>
       {/* Display chat messages here */}
+      <div className='chat-input-wrapper'>
+        <input 
+          className="chat-input"
+          id="text-input"
+          placeholder={placeholder}
+        />
+        <button className="send-button" onClick={handleSubmit}>Send</button>
+      </div>
+    </div>
     </>
   );
 };

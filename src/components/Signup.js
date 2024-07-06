@@ -5,43 +5,62 @@ import Header from './Header.js';
 import { handleSignup, handleLogin } from '../utils/firebase.js'
 
 
+/**
+ * Renders the Signup component, which allows users to sign up for an account.
+ *
+ * The component manages the state of the email, password, and confirm password fields,
+ * and handles the form submission. If the passwords do not match, an error message is
+ * displayed. If the signup is successful, the user is redirected to the home page.
+ * If there is an error during signup, the error message is displayed.
+ *
+ * The component uses the `handleSignup` function from the `firebase.js` utility module
+ * to handle the signup process.
+ */
 const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-        setError('Passwords do not match');
-        return;
+      setError("Passwords do not match");
+      return;
     }
 
-    const { success, user, error: signupError } = await handleSignup(email, password);
+    const {
+      success,
+      user,
+      error: signupError,
+    } = await handleSignup(email, password);
     if (success) {
-        // Handle successful signup
-        console.log(user);
-        navigate('/'); // Redirect to home page
+      // Handle successful signup
+      console.log(user);
+      navigate("/"); // Redirect to home page
     } else {
-        // Handle signup error
-        setError(signupError.message || 'Signup failed. Please try again.');
+      // Handle signup error
+      setError(signupError.message || "Signup failed. Please try again.");
     }
-};
+  };
 
   return (
     <>
-    <Ui />
-    {/* <Header /> */}
-    <div className="container bg-gradient-to-r from-blue-400 to-indigo-600">
+      <Ui />
+      {/* <Header /> */}
+      <div className="container bg-gradient-to-r from-blue-400 to-indigo-600">
         <div className="card">
-          <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-900 select-none">Sign Up</h2>
+          <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-900 select-none">
+            Sign Up
+          </h2>
           {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-group mb-4">
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -52,7 +71,9 @@ const Signup = () => {
               />
             </div>
             <div className="form-group mb-6">
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
               <input
                 type="password"
                 id="password"
@@ -63,7 +84,9 @@ const Signup = () => {
               />
             </div>
             <div className="form-group mb-6">
-              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -73,15 +96,15 @@ const Signup = () => {
                 className="form-input"
               />
             </div>
-            <button
-              type="submit"
-              className="btn-login"
-            >
+            <button type="submit" className="btn-login">
               Sign Up
             </button>
           </form>
           <p className="text-center text-gray-600 mt-4 select-none">
-            Already have an account? <Link to="/login" className="signup-link">Log in</Link>
+            Already have an account?{" "}
+            <Link to="/login" className="signup-link">
+              Log in
+            </Link>
           </p>
         </div>
       </div>

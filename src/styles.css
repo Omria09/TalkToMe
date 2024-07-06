@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    color: lightgray;
 }
   
 header, footer {
@@ -19,6 +20,7 @@ footer {
     color: white;
     text-align: left;
     padding: 10px;
+    user-select: none;
 }
 nav ul {
     list-style-type: none;
@@ -88,11 +90,18 @@ body {
   
   /* NAVIGATION  */
   
-
+#root {
+  height: 100%; /* Full height of the viewport */
+  display: flex;
+  flex-direction: column; /* Ensures vertical layout for children */
+  position: absolute;
+  background: #2b2b2be5;
+}
 
 /* Main app */
 .App {
   display: flex;
+  height: 100%;
 }
 
 .friends-button-container {
@@ -104,13 +113,15 @@ body {
 .sidebar,
 .main-content,
 .video-placeholder {
-  flex: 1;
+  /* flex: 1; */
+  flex: 0.4;
   padding: 15px;
-  border-left: 1px solid lightgrey;
+  user-select: none;
+  /* border-left: 1px solid lightgrey; */
 }
 
 .sidebar {
-  border-right: 1px solid lightgrey;
+  border-right: 1px solid rgb(145, 145, 145);
 }
 
 .sidebar h2,
@@ -129,17 +140,23 @@ li {
 }
 
 .friends-btn {
-  background-color: #007bff;
-  color: white;
   border: none;
+  cursor: pointer;
+  background-color: transparent; /* Make background transparent */
+  color: inherit;                /* Use inherited text color */
+  text-decoration: none;         /* Remove underline if any */
+  font: inherit;                 /* Inherit font settings */
+  box-shadow: none;              /* Remove any shadow effects */
+  display: block;               /* Display as block to fill entire width */
   padding: 10px 20px;
   border-radius: 2px;
-  width: 100%;
-  cursor: pointer;
+  width: 100%;                  /* Ensure it spans the entire width */
+  text-align: center;           /* Center text horizontally */
+  box-sizing: border-box;       /* Include padding in width calculation */
 }
 
 .friends-btn:hover {
-  background-color: #0056b3;
+  background-color: #2b2b2b50;
 }
 
 .main-content{

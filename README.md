@@ -8,6 +8,10 @@ TalkToMe is a desktop application built with React and Electron, designed to fac
 - **Screen Sharing:** Share your screen with others to collaborate in real-time.
 - **Text Messaging:** Send and receive messages instantly during video calls.
 
+
+## WIP screenshots
+![image](https://github.com/Omria09/TalkToMe/assets/53431803/b5b703a6-9483-4043-8b7e-d2e8d35f6139)
+
 ## Table of Contents
 
 - [Installation](#installation)

@@ -10,7 +10,8 @@ TalkToMe is a desktop application built with React and Electron, designed to fac
 
 
 ## WIP screenshots
-![image](https://github.com/Omria09/TalkToMe/assets/53431803/b5b703a6-9483-4043-8b7e-d2e8d35f6139)
+![image](https://github.com/user-attachments/assets/d1f1fde3-91ec-4601-a549-148a81d88240)
+
 
 ## Table of Contents
 

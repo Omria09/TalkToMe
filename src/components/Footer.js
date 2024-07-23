@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { isAuthenticated } from '../components/auth.js';
+import { useUid } from '../components/auth.js';
+import { getUserInfo} from '../utils/firebase.js';
+
+
+const fetchUserData = async (uid) => {
+  const result = await getUserInfo(uid);
+  if (result.success) {
+    return result.data;
+  } else {
+    throw new Error(result.error);
+  }
+};
+     
 
 /**
  * Renders the footer component for the application.
@@ -7,13 +19,39 @@ import { isAuthenticated } from '../components/auth.js';
  * The user's email is retrieved using the `isAuthenticated()` function from the `auth.js` module.
  */
 const Footer = () => {
+  const uid = useUid();
+  const [username, setUsername] = useState('');
+  const [pictureUrl, setPictureurl] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(()=>{
+    if (uid){
+      const getUserData = async() =>{
+        try{
+          const user = await fetchUserData(uid);
+          setUsername(user.username);
+          setPictureurl(user.photoURL);
+        } catch (error) {
+          setError(error.message);
+        }finally{
+          setLoading(false);
+        }
+      };
+      getUserData();
+    }
+  })
+
   return (
     <footer>
       <div className="small-avatar">
-        <img src="https://placehold.co/50x50/png" alt="Avatar" />
+        <img src={pictureUrl} alt="Avatar"/>
         <div className="user-info">
-          {<a className="user-email">{isAuthenticated()}</a>}
-          {<a className="user-status">Online</a>}
+          {<a className="user-displayname">{username}</a>}
+          <div className='online-status'>
+            <div className="status-dot"></div>
+            {<a className="user-status">Online</a>}
+          </div>
         </div>
       </div>
     </footer>

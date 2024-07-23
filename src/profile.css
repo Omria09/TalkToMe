@@ -19,8 +19,10 @@
   }
   
   .avatar img {
-    width: 100%;
-    height: auto;
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height to match the width */
+    border-radius: 50%; /* Make the image circular */
+    object-fit: cover; /* Ensure the image covers the container */
   }
   
   .user-details {

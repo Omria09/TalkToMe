@@ -6,10 +6,15 @@ body {
 }
   
 header, footer {
-    background: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+header:hover, footer:hover {
+  background-color: #444;
 }
 footer {
     position: absolute;
@@ -36,6 +41,11 @@ nav ul li a {
     text-decoration: none;
     color: white;
     margin-left: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+}
+nav ul li a:hover {
+  color: #f0f0f0;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
 }
 
 main {
@@ -88,8 +98,13 @@ body {
     color: white;
   }
   
-  /* NAVIGATION  */
-  
+
+
+/* page transition animations */
+
+
+
+/* NAVIGATION  */
 #root {
   height: 100%; /* Full height of the viewport */
   display: flex;
@@ -153,6 +168,7 @@ li {
   width: 100%;                  /* Ensure it spans the entire width */
   text-align: center;           /* Center text horizontally */
   box-sizing: border-box;       /* Include padding in width calculation */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .friends-btn:hover {
@@ -161,6 +177,7 @@ li {
 
 .main-content{
   flex: 1 1 50%; /* Set main-content to take 50% of the screen */
+  max-height: 90vh;
 
 }
 .main-content li{
@@ -179,15 +196,26 @@ li {
   display: flex;
   align-items: center;
 }
-.user-email{
+.user-displayname{
   padding-left: 10px;
+  font-size: larger;
 }
-.small-avatar img{
+.small-avatar img {
   border-radius: 100px;
+  height: 50px;
+  width: 50px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.small-avatar img:hover {
+  transform: scale(1.04); /* Slightly enlarge on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
 .user-status{
   color: lightgrey;
-  padding-left: 10px;
+  padding-left: 5px;
+  font-size: small;
 }
 .user-info{
   display: flex;
@@ -195,7 +223,7 @@ li {
   align-items: left;
 }
 
-.logout-button{
+.logout-button {
   background: none;
   border: none;
   padding: 0;
@@ -204,10 +232,27 @@ li {
   color: inherit;
   cursor: pointer;
   text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
-.logout-button:focus{
+
+.logout-button:focus {
   outline: none; 
 }
-.logout-button:active{
+
+.logout-button:active {
   color: lightgrey;
+  transform: scale(0.98); /* Slightly shrink when clicked */
+}
+
+
+.online-status{
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.status-dot {
+  width: 10px; /* Diameter of the dot */
+  height: 10px; /* Diameter of the dot */
+  border-radius: 50%; /* Makes the dot circular */
+  background-color: green; /* Green color for the dot */
 }

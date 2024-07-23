@@ -55,70 +55,98 @@ function createWindow() {
     mainWindow.close();
   });
 
- // Save login data after successful login
-ipcMain.on('save-login-data', async (event, { email, password }) => {
-  try {
-    await keytar.setPassword('TalkToMe', email, password);
-    console.log("Login data saved!");
-    event.reply('login-data-saved');
-  } catch (error) {
-    console.error('Error saving login data:', error);
-    event.reply('login-data-save-error', error.message);
-  }
-});
+  // Save login data after successful login
+  ipcMain.on('save-login-data', async (event, { email, password, uid }) => {
+    try {
+      // Save email and password
+      await keytar.setPassword('TalkToMe', email, password);
+      // Save UID
+      // Key: "TalkToMe-UID", Account: email, Password: uid
+      await keytar.setPassword('TalkToMe-UID', email, uid);
 
-// Retrieve user data when needed
-ipcMain.on('get-current-user', async (event) => {
-  try {
-    const email = await getStoredEmail(); // Implement this function to retrieve the email
-    event.reply('current-user', email);
-  } catch (error) {
-    console.error('Error retrieving current user:', error);
-    event.reply('current-user-error', error.message);
-  }
-});
-
-// A helper function to get stored email
-async function getStoredEmail() {
-  const accounts = await keytar.findCredentials('TalkToMe');
-  return accounts.length > 0 ? accounts[0].account : null;
-}
-
-// Retrieve login data when needed
-ipcMain.on('get-login-data', async (event, email) => {
-  try {
-    const password = await keytar.getPassword('TalkToMe', email);
-    event.reply('send-login-data', { email, password });
-  } catch (error) {
-    console.error('Error retrieving login data:', error);
-    event.reply('login-data-retrieve-error', error.message);
-  }
-});
-
-// Function to clear stored login data
-const clearLoginData = async () => {
-  try {
-    await keytar.deletePassword('TalkToMe', 'email'); 
-    await keytar.deletePassword('TalkToMe', 'password');
-  } catch (error) {
-    console.error('Error clearing login data:', error);
-  }
-};
-
-// Handle logout request from renderer process
-// Clear login data when user logs out
-ipcMain.on('logout', async (event) => {
-  try {
-    const accounts = await keytar.findCredentials('TalkToMe');
-    for (const account of accounts) {
-      await keytar.deletePassword('TalkToMe', account.account);
+      event.reply('login-data-saved');
+    } catch (error) {
+      console.error('Error saving login data:', error);
+      event.reply('login-data-save-error', error.message);
     }
-    event.reply('logout-success');
-  } catch (error) {
-    console.error('Error during logout:', error);
-    event.reply('logout-error', error.message);
+  });
+
+  // Retrieve user data when needed
+  ipcMain.on('get-current-user', async (event) => {
+    try {
+      const email = await getStoredEmail();
+      event.reply('current-user', email);
+    } catch (error) {
+      console.error('Error retrieving current user:', error);
+      event.reply('current-user-error', error.message);
+    }
+  });
+  // Retrieve user id when needed
+  ipcMain.on('get-current-uid', async (event) => {
+    try {
+      const email = await getStoredEmail();
+      // Retrieve UID
+      const uid = await keytar.getPassword('TalkToMe-UID', email);
+      event.reply('current-uid', uid);
+    } catch (error) {
+      console.error('Error retrieving current uid:', error);
+      event.reply('current-uid-error', error.message);
+    }
+  });
+
+  // A helper function to get stored email
+  async function getStoredEmail() {
+    const accounts = await keytar.findCredentials('TalkToMe');
+    return accounts.length > 0 ? accounts[0].account : null;
   }
-});
+
+  // Retrieve login data when needed
+  ipcMain.on('get-login-data', async (event, email) => {
+    try {
+      const password = await keytar.getPassword('TalkToMe', email);
+      event.reply('send-login-data', { email, password });
+    } catch (error) {
+      console.error('Error retrieving login data:', error);
+      event.reply('login-data-retrieve-error', error.message);
+    }
+  });
+
+  // Function to clear stored login data
+  const clearLoginData = async () => {
+    try {
+      await keytar.deletePassword('TalkToMe', 'email'); 
+      await keytar.deletePassword('TalkToMe', 'password');
+    } catch (error) {
+      console.error('Error clearing login data:', error);
+    }
+  };
+
+  // Handle logout request from renderer process
+  // Clear login data when user logs out
+  ipcMain.on('logout', async (event) => {
+    try {
+      // Find and delete credentials for 'TalkToMe'
+      const talkToMeAccounts = await keytar.findCredentials('TalkToMe');
+      for (const account of talkToMeAccounts) {
+        await keytar.deletePassword('TalkToMe', account.account);
+      }
+  
+      // Find and delete credentials for 'TalkToMe-UID'
+      const talkToMeUidAccounts = await keytar.findCredentials('TalkToMe-UID');
+      for (const account of talkToMeUidAccounts) {
+        await keytar.deletePassword('TalkToMe-UID', account.account);
+      }
+  
+      // Reply with a success message including the deleted accounts
+      event.reply('logout-success', {
+        talkToMe: talkToMeAccounts,
+        talkToMeUid: talkToMeUidAccounts
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      event.reply('logout-error', error.message);
+    }
+  });
 
 }
 

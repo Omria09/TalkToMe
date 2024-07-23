@@ -38,8 +38,8 @@ const Login = () => {
     } = await handleLogin(email, password);
     if (success) {
       // Send login data to main process
-      window.electron.ipcRenderer.send("save-login-data", { email, password });
-
+      var uid = user.uid;
+      window.electron.ipcRenderer.send("save-login-data", { email, password, uid});
       // Listen for successful data save
       window.electron.ipcRenderer.receive("login-data-saved", () => {
         setMessage("Login data saved successfully!");

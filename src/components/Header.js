@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-const { ipcRenderer } = window.electron;
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from './auth';
 
+// Use `ipcRenderer` from `window.electron` to handle inter-process communication
+const { ipcRenderer } = window.electron;
 
 /**
  * Renders the header component for the application.
@@ -13,60 +13,65 @@ import { isAuthenticated } from './auth';
 const Header = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
+  const handleCurrentUser = (email) => {
+    if (email) {
+      setEmail(email);
+    } else {
+      setError('No user logged in');
+    }
+  };
+  
   useEffect(() => {
-    // Send a request to get login data
-    ipcRenderer.send("get-current-user");
 
-    // Receive the login data
-    ipcRenderer.receive("current-user", (email) => {
-      if (email) {
-        setEmail(email);
-      } else {
-        setError("No user logged in");
-      }
-    });
-
-    // Handle errors
-    ipcRenderer.receive("current-user-error", (errorMessage) => {
+    const handleCurrentUserError = (errorMessage) => {
       setError(`Failed to retrieve user data: ${errorMessage}`);
-    });
-  }, []);
+    };
+
+    const handleLogoutSuccess = (event, data) => {
+      console.log('Logout successful', data);
+      navigate('/login'); // Redirect to login page
+    };
+
+    const handleLogoutError = (errorMessage) => {
+      setError(`Logout failed: ${errorMessage}`);
+    };
+
+    ipcRenderer.send('get-current-user');
+    ipcRenderer.on('current-user', handleCurrentUser);
+    ipcRenderer.on('current-user-error', handleCurrentUserError);
+    ipcRenderer.on('logout-success', handleLogoutSuccess);
+    ipcRenderer.on('logout-error', handleLogoutError);
+
+    // Cleanup listeners on component unmount
+    return () => {
+      ipcRenderer.removeListener('current-user', handleCurrentUser);
+      ipcRenderer.removeListener('current-user-error', handleCurrentUserError);
+      ipcRenderer.removeListener('logout-success', handleLogoutSuccess);
+      ipcRenderer.removeListener('logout-error', handleLogoutError);
+    };
+  }, [navigate]);
 
   const handleLogout = () => {
-    // Send logout request to main process
-    ipcRenderer.send("logout");
-
-    // Handle logout response
-    ipcRenderer.receive("logout-success", () => {
-      navigate("/login"); // Redirect to login page
-    });
-
-    // Handle logout error
-    ipcRenderer.receive("logout-error", (errorMessage) => {
-      setError(`Logout failed: ${errorMessage}`);
-    });
+    ipcRenderer.send('logout');
   };
+
   return (
     <nav>
       <ul>
-        <li>{isAuthenticated() ? <Link to="/">Home</Link> : null}</li>
-        <li>{isAuthenticated() ? <Link to="/profile">Profile</Link> : null}</li>
-        <li>{!isAuthenticated() ? <Link to="/login">Login</Link> : null}</li>
-        <li>{!isAuthenticated() ? <Link to="/signup">Signup</Link> : null}</li>
-        <li>
-          {isAuthenticated() ? (
+        {isAuthenticated() && <li><Link to="/">Home</Link></li>}
+        {isAuthenticated() && <li><Link to="/profile">Profile</Link></li>}
+        {!isAuthenticated() && <li><Link to="/login">Login</Link></li>}
+        {!isAuthenticated() && <li><Link to="/signup">Signup</Link></li>}
+        {isAuthenticated() && (
+          <li>
             <button onClick={handleLogout} className="logout-button">
               Logout
             </button>
-          ) : null}
-        </li>
-        <li>
-          {/* {<a className="user-email">{email}</a>}
-            {error && <a className="error-message">{error}</a>} */}
-        </li>
+          </li>
+        )}
       </ul>
     </nav>
   );
